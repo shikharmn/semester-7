@@ -1,5 +1,5 @@
 START:
-MOV 30H,#16H
+MOV 30H,#16H; Load data as required
 MOV 31H,#7H
 MOV 32H,#15H 
 MOV 33H,#2H
@@ -16,25 +16,25 @@ MOV 3DH,#14H
 MOV 3EH,#4H
 MOV 3FH,#13H
 
-MOV R3,#0FH
+MOV R3,#0FH; Size of our array
 
-OUT_LOOP:
+OUT_LOOP:; Control for the outer loop
 MOV B,R3
-MOV R4,B
-MOV R0,#30H
+MOV R4,B; Copy the value in R3 to R4
+MOV R0,#30H; Initialise the iterator
 
 IN_LOOP:
-MOV B,@R0
-INC R0
-MOV A,@R0
-CJNE A,B,NEXT
-NEXT: JNC NO_SWP
-MOV @R0,B
+MOV B,@R0; Store @R0 to B
+INC R0; Increment R0
+MOV A,@R0; Store @R0 to A
+CJNE A,B,NEXT; Carry is 1 if A>B
+NEXT: JNC NO_SWP; If carry is 0, jump to NO_SWP and skip the swap
+MOV @R0,B; Following lines swap the two elements
 DEC R0
 MOV @R0,A
 INC R0
 
-NO_SWP:
-DJNZ R4,IN_LOOP
-DJNZ R3,OUT_LOOP
+NO_SWP:; Skip swap if not needed
+DJNZ R4,IN_LOOP; Perform the comparison N times, making a single pass
+DJNZ R3,OUT_LOOP; Perform the pass N times
 END
