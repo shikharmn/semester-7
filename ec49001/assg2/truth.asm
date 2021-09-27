@@ -1,24 +1,60 @@
-MOV DPTR, #400H; DPTR at 400H in ROM
-MOV R0, #30H; 30H stored in R0
-MOV R1, #10H; 16 stored in R1
-BACK:
-	MOVC A, @A+DPTR; Move ROM data to Accumulator
-	INC DPTR; Next data in ROM, increment DPTR
-	MOV @R0, A; Move data in A to location stored in R0
-	INC R0; Next memory location in R0
-	CLR A; Clear A
-	DJNZ R1, BACK; Repeat this loop 16 times
+; Author: Shikhar Mohan
+; Date: 20/09/2021
+; EC49001: Assignment 2
 
-ORG 400H
-DB 0,1,1,1,0,1,0,0,0,1,0,0,0,1,1,1
 
-COUNT:
-MOV A, #00
-LOOP:
-	MOV P1,A
-	INC A
-	CJNE A,#0FH, LOOP
+MOV 30H,#1 
+MOV 31H,#1 
+MOV 32H,#1 
+MOV 33H,#0 
+MOV 34H,#1 
+MOV 35H,#1 
+MOV 36H,#1 
+MOV 37H,#0 
+MOV 38H,#0 
+MOV 39H,#0 
+MOV 3AH,#1 
+MOV 3BH,#0 
+MOV 3CH,#0 
+MOV 3DH,#0  
+MOV 3EH,#1 
+MOV 3FH,#0
+
+MOV R0,#30H
+MOV P2,#255
+MOV R1,#0
+
+OUTER_LOOP:
+JNB P2.0,EXCEPTION
+MOV A,R1
+SWAP A
+ADD A,@R0
+CPL A
 MOV P1,A
-SJMP COUNT
 
-END
+MOV A,R1
+SUBB A,#15
+JZ RESET
+INC R0
+INC R1
+JMP OUTER_LOOP
+
+RESET:
+MOV R0,#30H
+MOV R1,#00H
+JMP OUTER_LOOP
+
+EXCEPTION:
+MOV P1,#14
+CALL DELAY_MODULE 
+MOV P1,#255
+CALL DELAY_MODULE
+JMP RESET
+
+DELAY_MODULE:  MOV R5, #1 	
+DELAY1:	MOV R6, #1 	
+DELAY2:	MOV R4, #32 
+STAY:	DJNZ R4, STAY 	
+		DJNZ R6, DELAY2 
+		DJNZ R5, DELAY1 
+		RET
