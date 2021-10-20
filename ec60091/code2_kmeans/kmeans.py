@@ -1,7 +1,3 @@
-# Author: Shikhar Mohan
-# Roll No.: 18EC10054
-# Date: 28/09/2021
-
 import numpy as np
 import pandas as pd
 from itertools import permutations          # Recursively generates all permutations of a list
@@ -9,10 +5,6 @@ from matplotlib import pyplot as plt
 
 
 class KMeans:
-    """
-    Implementation Class of K-Means clustering. Takes arguments data_path, the value of K 
-    (number of classes) and number of epochs/iterations.
-    """
     def __init__(self, data_path=None, k=None, epochs=None):
         self.data_path = data_path
         data_pd = pd.read_csv(self.data_path)
@@ -27,15 +19,9 @@ class KMeans:
         self.clusters = None
 
     def calc_distance(self, p1, p2):
-        """
-        This function calculates the Euclidean Distance between two ndarray datapoints p1 and p2.
-        """
         return(np.linalg.norm(p1-p2))
 
     def get_preds(self, means=None, data=None):
-        """
-        This function gets class predictions when given the k means.
-        """
         
         if means is None:
             means = self.means
@@ -56,9 +42,6 @@ class KMeans:
             return preds
 
     def train(self, X_train=None, y_train=None):
-        """
-        This function trains the K-Means classifier algorithm.
-        """
         
         if X_train is None or y_train is None:
             X_train, y_train = self.X, self.y
@@ -101,21 +84,12 @@ class KMeans:
         self.preds = preds
 
     def predict_one(self, x):
-        """
-        This function provides classification for one sample.
-        """
         dists = np.sum((self.means - x)**2, axis=1)
         pred = np.argmin(dists)
         
         return pred
 
     def evaluate(self):
-        """
-        This function does multiple things.
-        1. Finds out the permuation mapping between k-means clusters and ground truth clusters
-        2. Prints the corresponding means
-        3. Evaluates and prints the jaccard score for each cluster.
-        """
         
         perms = permutations(range(self.k))
         max_total = 0
@@ -157,9 +131,6 @@ class KMeans:
         return (1.0*max_total/self.y.shape[0])
 
     def scatter_plot(self):
-        """
-        This function creates two scatter plots: One with ground truth clusters, one with prediction clusters.
-        """
         x = self.X[:,1]                         # Features 2 and 4 are chosen for scatter plot
         y = self.X[:,3]
         color = ['blue', 'red', 'green']
@@ -179,14 +150,9 @@ class KMeans:
         plt.savefig('gt_scatter.png')
 
     def _np_from_pd(self, data_pd):
-        """
-        This function takes a dataset as a pandas dataframe with string class labels as input
-        and returns numpy arrays (ndarrays) for testing and training data and labels.
-        """
         data_np = data_pd.to_numpy()
         np.random.shuffle(data_np)
 
-        # Splitting into data and class labels
         X, y = data_np[:,:data_np.shape[1]-1], data_np[:,data_np.shape[1]-1]
         
         string_labels = np.unique(y)
@@ -200,12 +166,7 @@ class KMeans:
 
 if __name__ == '__main__':
 
-    np.random.seed(4)                                   # Fixing seed for reproducibility
-    kwargs = {'data_path': './iris_plant.csv',          # CSV file path
-              'k': 3,
-              'epochs': 10}                             # Number of iterations
-
-    model = KMeans(**kwargs)
+    model = KMeans('./iris_plant.csv',3,10)
     model.train()
     acc = model.evaluate()
     print("Accuracy: %.5f" % (acc))
