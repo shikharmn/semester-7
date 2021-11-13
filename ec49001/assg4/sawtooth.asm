@@ -38,15 +38,15 @@ MOV 35, #29
 MOV 36, #24
 
 LOOP:
-MOV A, @R1
+MOV A, @R1			; Stores value of function from @R1
 MOV P1, A
 INC R1
 
-CJNE R1,#37,LOOP
-MOV R1, #05H
+CJNE R1,#37,LOOP	; If not reached the end of memory, keep looping
+MOV R1, #05H		; Start again
 SJMP LOOP
 
-DELAY:
+DELAY:		; Delay module
 MOV R0,#100
 DJNZ R0,$
 RET

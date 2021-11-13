@@ -1,0 +1,24 @@
+; Author: Shikhar Mohan
+; Date: 8/11/2021
+; EC49001: Lab Test
+
+LOOP:
+MOV P1,#0
+MOV P2,#1
+ACALL DELAY1
+MOV P1,#1
+MOV P2,#0
+ACALL DELAY1
+SJMP LOOP
+
+
+DELAY1: MOV R5,#250
+LABEL: ACALL DELAY;  One operation takes 250ms
+       ACALL DELAY;  We run two of these
+       DJNZ R5,LABEL
+       RET
+DELAY: MOV R6,#250
+       MOV R7,#250
+LOOP1: DJNZ R6,LOOP1
+LOOP2: DJNZ R7,LOOP1
+       RET
