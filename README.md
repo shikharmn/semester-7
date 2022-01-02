@@ -6,3 +6,5 @@ This repository includes code assignments and reports from my Semester 7 in E & 
 - EC60091: Machine Intelligence and Expert Systems
 - EC60083: Information Theory
 - CS60073: Advanced Machine Learning
+
+The term project for EC61409 can be found at https://github.com/shikharmn/sisr_gan.
